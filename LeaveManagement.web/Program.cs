@@ -1,4 +1,9 @@
+using LeaveManagement.web.Configurations;
 using LeaveManagement.web.Data;
+using LeaveManagement.web.GenericRepoistory;
+using LeaveManagement.web.Generics.Interfaces;
+using LeaveManagement.web.Repoistory;
+using LeaveManagement.web.Repoistory.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +17,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped(typeof(IGenericRepoistory<>), typeof(GenericRepoistory<>));
+builder.Services.AddScoped<ILeaveTypeRepoistory, LeaveTypeRepoistory>();
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

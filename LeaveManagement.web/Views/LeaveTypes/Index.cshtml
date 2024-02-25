@@ -1,0 +1,71 @@
+﻿@using LeaveManagement.web.Models
+@model IEnumerable<LeaveTypeViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DefaultDays)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefaultDays)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <button data-id="@item.Id" class="btn btn-danger deleteThatRow" type="button">Delete</button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<form id="DeleteFrom" asp-action="Delete">
+    <input type="hidden" id="LeaveTypeId" name="Id"/>
+</form>
+
+
+@section CustomScripts{
+    <script>
+        $(function () {
+            $('.deleteThatRow').click(function (e) {
+                let btn = $(this); // Capture the clicked button
+                swal({
+                    title: 'Are you sure?',
+                    text: 'This Will Delete This Record Forever?',
+                    icon: 'warning',
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        let capturethebtnvalue = btn.data("id"); // Capture the data-id attribute
+                        $('#LeaveTypeId').val(capturethebtnvalue);
+                        $("#DeleteFrom").submit();
+                    }
+                });
+            });
+        });
+    </script>
+}
